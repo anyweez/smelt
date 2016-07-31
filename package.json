@@ -1,0 +1,29 @@
+{
+  "name": "smelt",
+  "version": "1.0.0",
+  "description": "Javascript practice problem tool",
+  "main": "smelt.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "smelt": "./smelt.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anyweez/smelt.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anyweez/smelt/issues"
+  },
+  "homepage": "https://github.com/anyweez/smelt#readme",
+  "dependencies": {
+    "ava": "^0.15.2",
+    "jshint": "^2.9.2",
+    "mz": "^2.4.0",
+    "request": "^2.74.0",
+    "request-promise": "^4.0.2"
+  }
+}
