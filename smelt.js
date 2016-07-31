@@ -6,6 +6,8 @@ const request = require('request-promise');
 let jshint = require('jshint').JSHINT;
 const spawn = require('child_process').spawn;
 
+if (process.argv.length !== 3) throw Error('You must provide a filename.');
+
 // const REMOTE_CHALLENGES_LIST_URL = 'https://anyweez.github.io/smelt.io/challenges.json';
 // const REMOTE_CHALLENGES_BASE = 'https://anyweez.github.io/smelt.io/challenges';
 const REMOTE_CHALLENGES_LIST_URL = 'http://localhost:3000/challenges.json';
@@ -44,7 +46,11 @@ request(REMOTE_CHALLENGES_LIST_URL)
                 jshint(code, {}, {});
 
                 let funcs = jshint.data().functions.map(f => {
-                    return { name: f.name, line: f.line - 1 };
+                    return { 
+                        name: f.name, 
+                        description: f.description, 
+                        line: f.line - 1 
+                    };
                 }).filter(f => available.map(a => a.name).indexOf(f.name) >= 0);
 
                 if (funcs.length !== 1) {
@@ -52,6 +58,8 @@ request(REMOTE_CHALLENGES_LIST_URL)
                 }
 
                 challenge = available.find(prob => prob.name === funcs[0].name);
+                challenge.line = funcs[0].line;
+                
                 console.log(challenge.name.toUpperCase());
                 console.log(challenge.description);
                 console.log();
@@ -73,7 +81,7 @@ request(REMOTE_CHALLENGES_LIST_URL)
                 env.SMELT_BASE_DIR = __dirname;
 
                 let tester = spawn(
-                    `node_modules/.bin/ava`,
+                    `${__dirname}/node_modules/.bin/ava`,
                     ['--verbose', `${process.cwd()}/${TESTS_FILE}`],
                     { env: env }
                 );
