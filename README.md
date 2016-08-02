@@ -1,2 +1,3 @@
-# smelt
+# sor
+
 Javascript practice problem tool

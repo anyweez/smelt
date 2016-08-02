@@ -1,24 +1,24 @@
 {
-  "name": "smelt",
-  "version": "1.0.0",
+  "name": "sor",
+  "version": "1.0.1",
   "description": "Javascript practice problem tool",
-  "main": "smelt.js",
+  "main": "sor.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "smelt": "./smelt.js"
+    "sor": "./sor.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anyweez/smelt.git"
+    "url": "git+https://github.com/anyweez/sor.git"
   },
   "author": "@anyweez (Luke Segars)",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/anyweez/smelt/issues"
+    "url": "https://github.com/anyweez/sor/issues"
   },
-  "homepage": "https://github.com/anyweez/smelt#readme",
+  "homepage": "https://github.com/anyweez/sor#readme",
   "dependencies": {
     "ava": "^0.15.2",
     "jshint": "^2.9.2",

@@ -8,24 +8,24 @@ const spawn = require('child_process').spawn;
 
 if (process.argv.length !== 3) throw Error('You must provide a filename.');
 
-// const REMOTE_CHALLENGES_LIST_URL = 'https://anyweez.github.io/smelt.io/challenges.json';
-// const REMOTE_CHALLENGES_BASE = 'https://anyweez.github.io/smelt.io/challenges';
+// const REMOTE_CHALLENGES_LIST_URL = 'https://anyweez.github.io/sorjs.com/challenges.json';
+// const REMOTE_CHALLENGES_BASE = 'https://anyweez.github.io/sorjs.com/challenges';
 const REMOTE_CHALLENGES_LIST_URL = 'http://localhost:3000/challenges.json';
 const REMOTE_CHALLENGES_BASE = 'http://localhost:3000/challenges';
 const TARGET_FILE = process.argv[2];
-const SMELT_FILE = 'smelt.target.js';
-const TESTS_FILE = 'smelt.tests.js';
+const SOR_FILE = 'sor.target.js';
+const TESTS_FILE = 'sor.tests.js';
 
 /**
  * 1. Get list of all available tests from server (test names).
  * 2. Statically analyze use code to find matching function names.
  * 3. Export the matching method. Error if zero or more than one matches.
  * 4. Download tests, import exported function, and run tests.
- * 5. Cleanup (delete smelt target, test file)
+ * 5. Cleanup (delete sor target, test file)
  */
 
 function cleanup() {
-    fs.unlink(SMELT_FILE);
+    fs.unlink(SOR_FILE);
     fs.unlink(TESTS_FILE);
 }
 
@@ -67,7 +67,7 @@ request(REMOTE_CHALLENGES_LIST_URL)
                 // 3
                 let lines = code.split('\n');
                 lines[challenge.line] = 'module.exports = ' + lines[challenge.line];
-                return fs.writeFile(SMELT_FILE, lines.join('\n'), { encoding: 'utf8' });
+                return fs.writeFile(SOR_FILE, lines.join('\n'), { encoding: 'utf8' });
             })
             .then(() => {
                 return request(testUrlBuilder(challenge.func))
@@ -78,7 +78,7 @@ request(REMOTE_CHALLENGES_LIST_URL)
             .then(() => {
                 // 4
                 let env = process.env;
-                env.SMELT_BASE_DIR = __dirname;
+                env.SOR_BASE_DIR = __dirname;
 
                 let tester = spawn(
                     `${__dirname}/node_modules/.bin/ava`,
