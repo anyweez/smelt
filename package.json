@@ -13,7 +13,7 @@
     "type": "git",
     "url": "git+https://github.com/anyweez/smelt.git"
   },
-  "author": "",
+  "author": "@anyweez (Luke Segars)",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/anyweez/smelt/issues"

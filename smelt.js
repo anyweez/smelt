@@ -48,19 +48,19 @@ request(REMOTE_CHALLENGES_LIST_URL)
                 let funcs = jshint.data().functions.map(f => {
                     return { 
                         name: f.name, 
-                        description: f.description, 
                         line: f.line - 1 
                     };
-                }).filter(f => available.map(a => a.name).indexOf(f.name) >= 0);
+                }).filter(f => available.map(a => a.func).indexOf(f.name) >= 0);
 
                 if (funcs.length !== 1) {
                     throw Error(`Must only have one testable function per file; this one has ${funcs.length}`);
                 }
 
-                challenge = available.find(prob => prob.name === funcs[0].name);
+
+                challenge = available.find(prob => prob.func === funcs[0].name);
                 challenge.line = funcs[0].line;
                 
-                console.log(challenge.name.toUpperCase());
+                console.log(challenge.title.toUpperCase());
                 console.log(challenge.description);
                 console.log();
 
@@ -70,7 +70,7 @@ request(REMOTE_CHALLENGES_LIST_URL)
                 return fs.writeFile(SMELT_FILE, lines.join('\n'), { encoding: 'utf8' });
             })
             .then(() => {
-                return request(testUrlBuilder(challenge.name))
+                return request(testUrlBuilder(challenge.func))
                     .then(tests => {
                         fs.writeFile(TESTS_FILE, tests, { encoding: 'utf8' });
                     });
