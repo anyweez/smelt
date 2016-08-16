@@ -8,10 +8,8 @@ const spawn = require('child_process').spawn;
 
 if (process.argv.length !== 3) throw Error('You must provide a filename.');
 
-// const REMOTE_CHALLENGES_LIST_URL = 'https://anyweez.github.io/sorjs.com/challenges.json';
-// const REMOTE_CHALLENGES_BASE = 'https://anyweez.github.io/sorjs.com/challenges';
-const REMOTE_CHALLENGES_LIST_URL = 'http://localhost:3000/challenges.json';
-const REMOTE_CHALLENGES_BASE = 'http://localhost:3000/challenges';
+const REMOTE_CHALLENGES_LIST_URL = 'https://sorjs.com/challenges.json';
+const REMOTE_CHALLENGES_BASE = 'https://sorjs.com/challenges';
 const TARGET_FILE = process.argv[2];
 const SOR_FILE = 'sor.target.js';
 const TESTS_FILE = 'sor.tests.js';
@@ -56,12 +54,11 @@ request(REMOTE_CHALLENGES_LIST_URL)
                     throw Error(`Must only have one testable function per file; this one has ${funcs.length}`);
                 }
 
-
                 challenge = available.find(prob => prob.func === funcs[0].name);
                 challenge.line = funcs[0].line;
                 
                 console.log(challenge.title.toUpperCase());
-                console.log(challenge.description);
+                console.log(challenge.description.short);
                 console.log();
 
                 // 3
