@@ -8,6 +8,9 @@ const spawn = require('child_process').spawn;
 
 if (process.argv.length !== 3) throw Error('You must provide a filename.');
 
+// Temporary variables for local testing...need to make this a bit more fluid later.
+//const REMOTE_CHALLENGES_LIST_URL = 'http://localhost:3000/challenges.json';
+//const REMOTE_CHALLENGES_BASE = 'http://localhost:3000/challenges';
 const REMOTE_CHALLENGES_LIST_URL = 'https://sorjs.com/challenges.json';
 const REMOTE_CHALLENGES_BASE = 'https://sorjs.com/challenges';
 const TARGET_FILE = process.argv[2];
@@ -75,11 +78,13 @@ request(REMOTE_CHALLENGES_LIST_URL)
             .then(() => {
                 // 4
                 let env = process.env;
-                env.SOR_BASE_DIR = __dirname;
+                env.SOR_RUNNER_DIR = `${__dirname}/node_modules/ava`;
 
                 let tester = spawn(
                     `${__dirname}/node_modules/.bin/ava`,
                     ['--verbose', `${process.cwd()}/${TESTS_FILE}`],
+		    // TODO: Should pass cwd instead of env once this bug is fixed: 
+		    // https://github.com/avajs/ava/issues/32
                     { env: env }
                 );
 
