@@ -1,8 +1,18 @@
 #!/usr/bin/env node
 
+/**
+ * Returns zero if the application runs successfully AND all tests pass. 
+ * Returns one if the application runs successfully but at least one test fails. 
+ * Returns a number >= 100 if an error occured during execution.
+ */
+
+const process = require('process');
 const request = require('request-promise');
 
-if (process.argv.length !== 3) throw Error('You must provide a filename.');
+if (process.argv.length !== 3) {
+    console.error('You must provide a filename.');
+    return 100;
+}
 
 /**
  * Initialize sorutils with configuration values. Sorutils is where the core
@@ -38,5 +48,9 @@ request(REMOTE_CHALLENGES_LIST_URL)
 
         return sorutil.generateFrom(TARGET_FILE, available)
             .then(sorutil.runTests.bind(sorutil))
-            .catch(error => console.error(`${error.type}: ${error.message}`));
+            .catch(error => {
+                console.error(`${error.type}: ${error.message}`);
+                sorutil._cleanup();
+                process.exit(error.code);
+            });
     });

@@ -11,7 +11,6 @@ module.exports = function (config) {
          * Remove all files created by other sorutil operations if they exist.
          */
         _cleanup() {
-            console.log('cleaning up');
             fs.unlink(config.sorFile);
             fs.unlink(config.testsFile);
         },
@@ -93,10 +92,17 @@ module.exports = function (config) {
             });
             tester.on('close', code => {
                 console.log();
-                if (code === 0) console.log('Successfully ran all tests!');
-                else console.error('Error encountered on at least one test.');
-
                 this._cleanup();
+
+                if (code === 0) {
+                    console.log('Successfully ran all tests!');
+                    process.exit(0);
+                }
+                else {
+                    console.error('Error encountered on at least one test.');
+                    process.exit(1);
+                }
+
             });
         }, // end run
     };

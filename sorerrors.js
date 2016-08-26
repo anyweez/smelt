@@ -7,6 +7,7 @@ module.exports = {
         return {
             type: 'Too many functions',
             message: `must have exactly one testable function per file; this one has ${count}.`,
+            code: 101,
         }
     },
 };
