@@ -3,6 +3,7 @@ const process = require('process');
 const jshint = require('jshint').JSHINT;
 const spawn = require('child_process').spawn;
 const request = require('request-promise');
+const errors = require('./sorerrors');
 
 module.exports = function (config) {
     return {
@@ -49,13 +50,9 @@ module.exports = function (config) {
                         };
                     }).filter(f => available.map(a => a.func).indexOf(f.name) >= 0);
 
-                    if (funcs.length !== 1) {
-                        throw {
-                            type: 'Too many functions',
-                            message: `must have exactly one testable function per file; this one has ${funcs.length}.`,
-                        };
-                    }
+                    if (funcs.length !== 1) throw errors.IncorrectFunctionCount({ count: funcs.length });
 
+                    // Find the challenge that matches (if any)
                     challenge = available.find(prob => prob.func === funcs[0].name);
                     challenge.line = funcs[0].line;
 
