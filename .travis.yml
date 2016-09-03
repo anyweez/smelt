@@ -1,0 +1,8 @@
+language: node_js
+node_js:
+    - "6"
+before_script:
+    - npm install -g gulp ava
+script: 
+    - npm test
+    - node sor.js changemaker.js
