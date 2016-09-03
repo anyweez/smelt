@@ -4,7 +4,8 @@
   "description": "Javascript practice problem tool",
   "main": "sor.js",
   "scripts": {
-    "test": "ava --serial tests/*.js"
+    "test": "ava --serial tests/*.js",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "bin": {
     "sor": "./sor.js"
@@ -27,6 +28,14 @@
     "request-promise": "^4.0.2"
   },
   "devDependencies": {
-    "ava": "^0.16.0"
+    "ava": "^0.16.0",
+    "coveralls": "^2.11.12",
+    "nyc": "^8.1.0"
+  },
+  "nyc": {
+    "exclude": [
+      "tests/",
+      "node_modules/"
+    ]
   }
 }

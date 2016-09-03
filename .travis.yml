@@ -6,3 +6,5 @@ before_script:
 script: 
     - npm test
     - node sor.js changemaker.js
+after_success: 
+    - npm run coverage
