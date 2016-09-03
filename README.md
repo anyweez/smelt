@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/anyweez/sor.svg?branch=master)](https://travis-ci.org/anyweez/sor)
 
+[![Coverage Status](https://coveralls.io/repos/github/anyweez/sor/badge.svg?branch=master)](https://coveralls.io/github/anyweez/sor?branch=master)
+
 Sor is a tool for checking your answers to a collection of curated practice problems. Pick a problem that you want to solve from [sorjs.com](https://sorjs.com), create a file with a function matching the specified name, and run:
 
 ```
