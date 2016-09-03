@@ -27,9 +27,7 @@ const sorutil = require('./sorutil')({
     testsFile: 'sor.tests.js',
 });
 
-// Temporary variables for local testing...need to make this a bit more fluid later.
-//const REMOTE_CHALLENGES_LIST_URL = 'http://localhost:3000/challenges.json';
-//const REMOTE_CHALLENGES_BASE = 'http://localhost:3000/challenges';
+// The URL to grab the list of available tests from.
 const REMOTE_CHALLENGES_LIST_URL = 'https://sorjs.com/challenges.json';
 const TARGET_FILE = process.argv[2];
 

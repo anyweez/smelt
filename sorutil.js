@@ -36,6 +36,7 @@ module.exports = function (config) {
             let challenge = null;
 
             return fs.readFile(target)
+                .catch(() => { throw errors.InvalidChallengeFile() })
                 .then(content => {
                     let code = content.toString('utf8');
 
