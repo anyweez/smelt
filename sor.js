@@ -40,7 +40,7 @@ const TARGET_FILE = process.argv[2];
  */
 
 // 1: get available tests.
-request(REMOTE_CHALLENGES_LIST_URL)
+request({ url: REMOTE_CHALLENGES_LIST_URL, headers: { 'User-Agent': 'SorClient' } })
     .then(response => {
         let available = JSON.parse(response).available;
 
