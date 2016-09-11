@@ -5,6 +5,8 @@ const spawn = require('child_process').spawn;
 const request = require('request-promise');
 const errors = require('./sorerrors');
 
+const CONFIRM_URL = 'https://sorjs.com/attempt?';
+
 module.exports = function (config) {
     return {
         /**
@@ -61,12 +63,14 @@ module.exports = function (config) {
                     // 3: output sorfile
                     let lines = code.split('\n');
                     lines[challenge.line] = `module.exports = ${lines[challenge.line]}`;
-                    return fs.writeFile(config.sorFile, lines.join('\n'), { encoding: 'utf8' });
+                    return fs.writeFile(config.sorFile, lines.join('\n'), { encoding: 'utf8' })
+                        .then(() => challenge);
                 })
-                .then(() => {
-                    return request(this.buildUrl(challenge.func))
+                .then(challenge => {
+                    return request({ url: this.buildUrl(challenge.func), headers: { 'User-Agent': 'SorClient' } })
                         .then(tests => {
                             fs.writeFile(config.testsFile, tests, { encoding: 'utf8' });
+                            return challenge;
                         });
                 });
         }, // end generateFrom
@@ -75,7 +79,7 @@ module.exports = function (config) {
          * Run tests on the sorfle, report results, and clean up the test file and sorfile. This function 
          * assumes that both the sorfile and testfile exist.
          */
-        runTests() {
+        runTests(challenge) {
             // 4
             process.env.SOR_RUNNER_DIR = `${__dirname}/node_modules/ava`;
 
@@ -91,19 +95,21 @@ module.exports = function (config) {
             tester.stderr.on('data', data => {
                 if (data.trim().length > 0) console.log(data.trim());
             });
+
             tester.on('close', code => {
                 console.log();
                 this._cleanup();
 
                 if (code === 0) {
                     console.log('Successfully ran all tests!');
-                    process.exit(0);
+                    request({ url: CONFIRM_URL + `challenge=${challenge.func}&success=1`, headers: { 'User-Agent': 'SorClient' } })
+                        .then(() => process.exit(0));
                 }
                 else {
                     console.error('Error encountered on at least one test.');
-                    process.exit(1);
+                    request({ url: CONFIRM_URL + `challenge=${challenge.func}&success=0`, headers: { 'User-Agent': 'SorClient' } })
+                        .then(() => process.exit(1));
                 }
-
             });
         }, // end run
     };
