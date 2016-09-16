@@ -22,6 +22,7 @@
   "homepage": "https://github.com/anyweez/sor#readme",
   "dependencies": {
     "ava": "^0.15.2",
+    "commander": "^2.9.0",
     "jshint": "^2.9.2",
     "mz": "^2.4.0",
     "request": "^2.74.0",

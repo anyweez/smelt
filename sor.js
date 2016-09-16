@@ -7,9 +7,16 @@
  */
 
 const process = require('process');
+const commander = require('commander');
 const request = require('request-promise');
 
-if (process.argv.length !== 3) {
+commander
+    .option('-r, --remote <url>', 'The server to retrieve challenges from')
+    .parse(process.argv);
+
+const REMOTE_CHALLENGE_URL = commander.remote || 'https://sorjs.com';
+
+if (commander.args.length !== 1) {
     console.error('You must provide a filename.');
     return 100;
 }
@@ -20,7 +27,7 @@ if (process.argv.length !== 3) {
  */
 const sorutil = require('./sorutil')({
     // The base URL for requests for challenges
-    baseUrl: 'https://sorjs.com/challenges',
+    baseUrl: `${REMOTE_CHALLENGE_URL}/challenges`,
     // The file that the tests should be run on.
     sorFile: 'sor.target.js',
     // The tests that should be run on the sorFile (downloaded from baseUrl)
@@ -28,7 +35,7 @@ const sorutil = require('./sorutil')({
 });
 
 // The URL to grab the list of available tests from.
-const REMOTE_CHALLENGES_LIST_URL = 'https://sorjs.com/challenges.json';
+const REMOTE_CHALLENGES_LIST_URL = `${REMOTE_CHALLENGE_URL}/challenges.json`;
 const TARGET_FILE = process.argv[2];
 
 /**

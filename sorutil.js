@@ -5,6 +5,7 @@ const spawn = require('child_process').spawn;
 const request = require('request-promise');
 const errors = require('./sorerrors');
 
+// TODO: this should respect the --remote setting
 const CONFIRM_URL = 'https://sorjs.com/attempt?';
 
 module.exports = function (config) {
