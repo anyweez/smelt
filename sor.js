@@ -53,6 +53,7 @@ request({ url: REMOTE_CHALLENGES_LIST_URL, headers: { 'User-Agent': 'SorClient' 
 
         return sorutil.generateFrom(TARGET_FILE, available)
             .then(sorutil.runTests.bind(sorutil))
+            .then(() => sorutil._cleanup())
             .catch(error => {
                 console.error(`${error.type || 'Unknown error'}: ${error.message}`);
                 console.log(error.stack);

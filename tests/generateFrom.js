@@ -1,14 +1,16 @@
 import test from 'ava';
 
-const fs = require('fs');
-const sorutil = require('../sorutil')({
+const config = {
     // The base URL for requests for challenges
-    baseUrl: 'https://sorjs.com/challenges',
+    baseUrl: 'http://localhost:3000',
     // The file that the tests should be run on.
-    sorFile: 'sor.target.js',
+    sorFile: `${process.cwd()}/_sor.target.js`,
     // The tests that should be run on the sorFile (downloaded from baseUrl)
-    testsFile: 'sor.tests.js',
-});
+    testsFile: `${process.cwd()}/_sor.tests.js`,
+};
+
+const fs = require('fs');
+const sorutil = require('../sorutil')(config);
 
 const available = [
     {
@@ -41,8 +43,8 @@ test.serial('can load valid challenge files and generate outputs', t => {
     return sorutil.generateFrom('sample/changemaker.js', available).then(() => {
         // Test to ensure the expected files exist.
         return Promise.all([
-            new Promise(resolve => fs.stat('sor.tests.js', err => resolve(t.is(err, null)))),
-            new Promise(resolve => fs.stat('sor.target.js', err => resolve(t.is(err, null)))),
+            new Promise(resolve => fs.stat(config.testsFile, err => resolve(t.is(err, null)))),
+            new Promise(resolve => fs.stat(config.sorFile, err => resolve(t.is(err, null)))),
         ]);
     }).then(() => sorutil._cleanup());
 });
