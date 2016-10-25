@@ -48,10 +48,28 @@ function Trial(test, args) {
     return this;
 }
 
+// Note: produces() and examine() aren't designed to be used together at this point.
 Trial.prototype.produces = function (expected) { return this._run(expected) };
-Trial.prototype.otherwise = function (msg) { 
-    this.tips.push(msg); 
-    return this; 
+Trial.prototype.examine = function (fn) {
+    try {
+        let { expected, produced } = fn(this.parent.fn.bind(null, ...clone(this.args)));
+        if (expected === undefined || produced === undefined) {
+            throw new Error('value of expected or produced is undefined');
+        }
+
+        this.outcome = expected === produced;
+        this.expected = expected;
+        this.produced = produced;
+
+    } catch (e) {
+        throw new Error(`Tests crashed during examination: ${e.message}`);
+    }
+
+    return this;
+}
+Trial.prototype.otherwise = function (msg) {
+    this.tips.push(msg);
+    return this;
 };
 
 Trial.prototype._run = function (expected) {
