@@ -27,11 +27,11 @@ if (commander.args.length !== 1) {
  */
 const sorutil = require('./sorutil')({
     // The base URL for requests for challenges
-    baseUrl: `${REMOTE_CHALLENGE_URL}/challenges`,
+    baseUrl: REMOTE_CHALLENGE_URL,
     // The file that the tests should be run on.
-    sorFile: 'sor.target.js',
+    sorFile: `${process.cwd()}/sor.target.js`,
     // The tests that should be run on the sorFile (downloaded from baseUrl)
-    testsFile: 'sor.tests.js',
+    testsFile: `${process.cwd()}/sor.tests.js`,
 });
 
 // The URL to grab the list of available tests from.
@@ -54,8 +54,10 @@ request({ url: REMOTE_CHALLENGES_LIST_URL, headers: { 'User-Agent': 'SorClient' 
         return sorutil.generateFrom(TARGET_FILE, available)
             .then(sorutil.runTests.bind(sorutil))
             .catch(error => {
-                console.error(`${error.type}: ${error.message}`);
+                console.error(`${error.type || 'Unknown error'}: ${error.message}`);
+                console.log(error.stack);
+
                 sorutil._cleanup();
-                process.exit(error.code);
+                process.exit(error.code || 1);
             });
     });

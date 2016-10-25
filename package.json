@@ -21,15 +21,16 @@
   },
   "homepage": "https://github.com/anyweez/sor#readme",
   "dependencies": {
-    "ava": "^0.15.2",
+    "chalk": "^1.1.3",
     "commander": "^2.9.0",
     "jshint": "^2.9.2",
+    "lodash": "^4.16.4",
     "mz": "^2.4.0",
     "request": "^2.74.0",
     "request-promise": "^4.0.2"
   },
   "devDependencies": {
-    "ava": "^0.16.0",
+    "ava": "^0.15.2",
     "coveralls": "^2.11.12",
     "nyc": "^8.1.0"
   },
