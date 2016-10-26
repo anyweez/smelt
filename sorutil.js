@@ -3,15 +3,20 @@ const process = require('process');
 const jshint = require('jshint').JSHINT;
 const spawn = require('child_process').spawn;
 const request = require('request-promise');
-const errors = require('./sorerrors');
-
+const updates = require('update-notifier');
 const rfr = require('rfr/lib/constants');
-
-const report = require('./mentor/reporter');
 const chalk = require('chalk');
+
+const errors = require('./sorerrors');
+const report = require('./mentor/reporter');
+
+const PACKAGE = require('./package.json');
+const SOR_VERSION = PACKAGE.version;
+const profile = require('./profile.json');
 
 module.exports = function (config) {
     process.env.SOR_MENTOR_PATH = `${rfr.defaultRoot}/mentor`;
+    updates({ pkg: PACKAGE }).notify();
 
     // TODO: this should respect the --remote setting
     const CONFIRM_URL = `${config.baseUrl}/attempt?`;

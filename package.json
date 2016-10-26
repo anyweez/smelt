@@ -28,7 +28,8 @@
     "mz": "^2.4.0",
     "request": "^2.74.0",
     "request-promise": "^4.0.2",
-    "rfr": "^1.2.3"
+    "rfr": "^1.2.3",
+    "update-notifier": "^1.0.2"
   },
   "devDependencies": {
     "ava": "^0.15.2",
