@@ -2,11 +2,12 @@ import test from 'ava';
 
 const sorutil = require('../sorutil')({
     // The base URL for requests for challenges
-    baseUrl: 'https://sorjs.com/challenges',
+    // baseUrl: 'https://sorjs.com',
+    baseUrl: 'http://localhost:3000',
     // The file that the tests should be run on.
-    sorFile: 'sor.target.js',
+    sorFile: `${process.cwd()}/sor.target.js`,
     // The tests that should be run on the sorFile (downloaded from baseUrl)
-    testsFile: 'sor.tests.js',
+    testsFile: `${process.cwd()}/sor.tests.js`,
 });
 
 const available = [
@@ -37,6 +38,7 @@ test.serial('runs successfully end-to-end', t => {
         })
         .catch(error => {
             sorutil._cleanup();
+            console.error(error);
             t.fail();
         });
 });

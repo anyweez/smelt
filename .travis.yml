@@ -2,9 +2,15 @@ language: node_js
 node_js:
     - "6"
 before_script:
-    - npm install -g gulp ava nyc coveralls
+    - npm install -g gulp ava nyc coveralls serve
+    - npm link
+    - git clone https://github.com/anyweez/sorjs.com
+    - cd sorjs.com && npm install && gulp && node scripts/build_challenges.js
+    - serve public &
+    - cd ..
+    - sleep 5
 script: 
     - nyc npm test
-    - node sor.js changemaker.js
+    - sor changemaker.js -r http://localhost:3000
 after_success: 
     - npm run coverage

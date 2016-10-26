@@ -5,10 +5,17 @@ const spawn = require('child_process').spawn;
 const request = require('request-promise');
 const errors = require('./sorerrors');
 
-// TODO: this should respect the --remote setting
-const CONFIRM_URL = 'https://sorjs.com/attempt?';
+const rfr = require('rfr/lib/constants');
+
+const report = require('./mentor/reporter');
+const chalk = require('chalk');
 
 module.exports = function (config) {
+    process.env.SOR_MENTOR_PATH = `${rfr.defaultRoot}/mentor`;
+
+    // TODO: this should respect the --remote setting
+    const CONFIRM_URL = `${config.baseUrl}/attempt?`;
+
     return {
         /**
          * Remove all files created by other sorutil operations if they exist.
@@ -19,18 +26,18 @@ module.exports = function (config) {
         },
 
         buildUrl(challenge) {
-            return `${config.baseUrl}/${challenge}.js`
+            return `${config.baseUrl}/challenges/${challenge}.js`
         },
 
         _showChallenge(challenge) {
-            console.log(challenge.title.toUpperCase());
-            console.log(challenge.description.short);
+            console.log(chalk.white.bold(challenge.title.toUpperCase()));
+            console.log(chalk.white(challenge.description.short));
             console.log();
         },
 
         /**
          * Given the provided path, generate the sorfile and download the approriate
-         * test file based on what function is found in the sorFile. Both files should
+         * test file based on what function is found in the sorfile. Both files should
          * exist when the promise returned by this function completes.
          * 
          * `available` is the array of problems available from the server.
@@ -70,7 +77,7 @@ module.exports = function (config) {
                 .then(challenge => {
                     return request({ url: this.buildUrl(challenge.func), headers: { 'User-Agent': 'SorClient' } })
                         .then(tests => {
-                            fs.writeFile(config.testsFile, tests, { encoding: 'utf8' });
+                            fs.writeFileSync(config.testsFile, tests, { encoding: 'utf8' });
                             return challenge;
                         });
                 });
@@ -81,37 +88,18 @@ module.exports = function (config) {
          * assumes that both the sorfile and testfile exist.
          */
         runTests(challenge) {
-            // 4
-            process.env.SOR_RUNNER_DIR = `${__dirname}/node_modules/ava`;
+            /**
+             * Require this file dynamically. Note that this is hard (impossible?) to do with ES6
+             * modules so when the time is right to transition this part will take some refactoring.
+             */
+            const outcome = require(config.testsFile);
+            report(challenge, outcome);
 
-            let tester = spawn(
-                `${__dirname}/node_modules/.bin/ava`,
-                ['--verbose', `${process.cwd()}/${config.testsFile}`],
-                // TODO: Should pass cwd instead of env once this bug is fixed: 
-                // https://github.com/avajs/ava/issues/32
-                { env: process.env }
-            );
-
-            tester.stderr.setEncoding('utf8');
-            tester.stderr.on('data', data => {
-                if (data.trim().length > 0) console.log(data.trim());
-            });
-
-            tester.on('close', code => {
-                console.log();
-                this._cleanup();
-
-                if (code === 0) {
-                    console.log('Successfully ran all tests!');
-                    request({ url: CONFIRM_URL + `challenge=${challenge.func}&success=1`, headers: { 'User-Agent': 'SorClient' } })
-                        .then(() => process.exit(0));
-                }
-                else {
-                    console.error('Error encountered on at least one test.');
-                    request({ url: CONFIRM_URL + `challenge=${challenge.func}&success=0`, headers: { 'User-Agent': 'SorClient' } })
-                        .then(() => process.exit(1));
-                }
-            });
+            // Send a ping to the sorjs server indicating whether the attempt was successful or not.
+            request({
+                url: CONFIRM_URL + `challenge=${challenge.func}&success=${outcome.report.success ? 1 : 0}`,
+                headers: { 'User-Agent': 'SorClient' }
+            }).then(() => process.exit(0));
         }, // end run
     };
 };
