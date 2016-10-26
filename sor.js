@@ -8,7 +8,6 @@
 const process = require('process');
 const commander = require('commander');
 const request = require('request-promise');
-const rfr = require('rfr/lib/constants');
 
 commander
     .option('-r, --remote <url>', 'The server to retrieve challenges from')
@@ -20,8 +19,6 @@ if (commander.args.length !== 1) {
     console.error('You must provide a filename.');
     return 100;
 }
-
-process.env.SOR_MENTOR_PATH = `${rfr.defaultRoot}/mentor`;
 
 /**
  * Initialize sorutils with configuration values. Sorutils is where the core

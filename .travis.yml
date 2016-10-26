@@ -11,6 +11,6 @@ before_script:
     - sleep 5
 script: 
     - nyc npm test
-    - sor changemaker.js
+    - sor changemaker.js -r http://localhost:3000
 after_success: 
     - npm run coverage

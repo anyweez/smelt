@@ -5,10 +5,13 @@ const spawn = require('child_process').spawn;
 const request = require('request-promise');
 const errors = require('./sorerrors');
 
+const rfr = require('rfr/lib/constants');
+
 const report = require('./mentor/reporter');
 const chalk = require('chalk');
 
 module.exports = function (config) {
+    process.env.SOR_MENTOR_PATH = `${rfr.defaultRoot}/mentor`;
 
     // TODO: this should respect the --remote setting
     const CONFIRM_URL = `${config.baseUrl}/attempt?`;
