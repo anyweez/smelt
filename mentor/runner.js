@@ -82,5 +82,6 @@ Trial.prototype._run = function (expected) {
 };
 
 module.exports = {
-    test(fn) { return new Test(fn); }
+    test(fn) { return new Test(fn); },
+    outcome(expected, produced) { return { expected, produced }; },
 };
