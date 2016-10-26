@@ -14,6 +14,8 @@ const PACKAGE = require('./package.json');
 const SOR_VERSION = PACKAGE.version;
 const profile = require('./profile.json');
 
+const SOR_VERSION = require('./package.json').version;
+
 module.exports = function (config) {
     process.env.SOR_MENTOR_PATH = `${rfr.defaultRoot}/mentor`;
     updates({ pkg: PACKAGE }).notify();
@@ -31,7 +33,7 @@ module.exports = function (config) {
         },
 
         buildUrl(challenge) {
-            return `${config.baseUrl}/challenges/${challenge}.js`
+            return `${config.baseUrl}/challenges/${challenge}.js?v=${SOR_VERSION}`
         },
 
         _showChallenge(challenge) {
@@ -102,7 +104,7 @@ module.exports = function (config) {
 
             // Send a ping to the sorjs server indicating whether the attempt was successful or not.
             request({
-                url: CONFIRM_URL + `challenge=${challenge.func}&success=${outcome.report.success ? 1 : 0}`,
+                url: CONFIRM_URL + `challenge=${challenge.func}&v=${SOR_VERSION}&success=${outcome.report.success ? 1 : 0}`,
                 headers: { 'User-Agent': 'SorClient' }
             }).then(() => process.exit(0));
         }, // end run
