@@ -5,7 +5,8 @@
   "main": "sor.js",
   "scripts": {
     "test": "ava --serial tests/*.js",
-    "coverage": "nyc report --reporter=text-lcov | coveralls"
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "postinstall": "node -e \"console.log(JSON.stringify({ id: Math.round(Math.random() * Number.MAX_SAFE_INTEGER) }))\" > profile.json"
   },
   "bin": {
     "sor": "./sor.js"
