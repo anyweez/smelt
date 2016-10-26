@@ -14,9 +14,6 @@ const PACKAGE = require('./package.json');
 const SOR_VERSION = PACKAGE.version;
 const profile = require('./profile.json');
 
-const SOR_VERSION = require('./package.json').version;
-const profile = require('./profile.json');
-
 module.exports = function (config) {
     process.env.SOR_MENTOR_PATH = `${rfr.defaultRoot}/mentor`;
     updates({ pkg: PACKAGE }).notify();
