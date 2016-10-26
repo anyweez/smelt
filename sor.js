@@ -5,10 +5,10 @@
  * Returns one if the application runs successfully but at least one test fails. 
  * Returns a number >= 100 if an error occured during execution.
  */
-
 const process = require('process');
 const commander = require('commander');
 const request = require('request-promise');
+const rfr = require('rfr/lib/constants');
 
 commander
     .option('-r, --remote <url>', 'The server to retrieve challenges from')
@@ -20,6 +20,8 @@ if (commander.args.length !== 1) {
     console.error('You must provide a filename.');
     return 100;
 }
+
+process.env.SOR_MENTOR_PATH = `${rfr.defaultRoot}/mentor`;
 
 /**
  * Initialize sorutils with configuration values. Sorutils is where the core
