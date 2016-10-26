@@ -11,6 +11,7 @@ const report = require('./mentor/reporter');
 const chalk = require('chalk');
 
 const SOR_VERSION = require('./package.json').version;
+const profile = require('./profile.json');
 
 module.exports = function (config) {
     process.env.SOR_MENTOR_PATH = `${rfr.defaultRoot}/mentor`;
@@ -28,7 +29,7 @@ module.exports = function (config) {
         },
 
         buildUrl(challenge) {
-            return `${config.baseUrl}/challenges/${challenge}.js?v=${SOR_VERSION}`
+            return `${config.baseUrl}/challenges/${challenge}.js?v=${SOR_VERSION}&user=${profile.id}`
         },
 
         _showChallenge(challenge) {
@@ -99,7 +100,7 @@ module.exports = function (config) {
 
             // Send a ping to the sorjs server indicating whether the attempt was successful or not.
             request({
-                url: CONFIRM_URL + `challenge=${challenge.func}&v=${SOR_VERSION}&success=${outcome.report.success ? 1 : 0}`,
+                url: CONFIRM_URL + `challenge=${challenge.func}&v=${SOR_VERSION}&user=${profile.id}&success=${outcome.report.success ? 1 : 0}`,
                 headers: { 'User-Agent': 'SorClient' }
             }).then(() => process.exit(0));
         }, // end run
